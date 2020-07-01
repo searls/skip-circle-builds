@@ -11,8 +11,6 @@
 # • https://gist.github.com/naesheim/18d0c0a58ee61f4674353a2f4cf71475
 # • http://www.zephyrizing.net/presentations/reimplementing-gitignore-in-15-lines-of-bash/
 
-set -e
-
 if [ -z "$GIT_BASE_REF" ]; then
   echo "--> ENV var GIT_BASE_REF is required, bailing…"
   exit 1
