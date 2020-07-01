@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# Expects:
+# • ENV var GIT_BASE_REF
+# • ENV var GIT_REF
+# • `circleci` bin (present on circleci workers)
+#
+# See:
+# • https://discuss.circleci.com/t/stop-build-with-success-failure-at-any-point-in-the-build-life-cycle/2691/4
+# • https://gist.github.com/naesheim/18d0c0a58ee61f4674353a2f4cf71475
+
+set -e
+
+git diff "$GIT_BASE_REF" "$GIT_REF" code 2>&1

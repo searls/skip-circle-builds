@@ -1,0 +1,14 @@
+version: 2.1
+
+jobs:
+  build:
+    docker:
+      - image: circleci/ruby:latest
+    environment:
+      GIT_BASE_REF: <<pipeline.git.base_revision>>
+      GIT_REF: <<pipeline.git.revision>>
+
+    steps:
+      - run: script/skip_build_if_ignored_paths
+
+
