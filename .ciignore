@@ -1,3 +1,3 @@
 # Will ignore relative globs passed to find
 README.md
-/content/*
+content/*
