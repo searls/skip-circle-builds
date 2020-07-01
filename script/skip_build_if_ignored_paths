@@ -4,11 +4,37 @@
 # • ENV var GIT_BASE_REF
 # • ENV var GIT_REF
 # • `circleci` bin (present on circleci workers)
+# • One or more `.ciignore` files to flag which paths kick off a build (like gitignore)
 #
 # See:
 # • https://discuss.circleci.com/t/stop-build-with-success-failure-at-any-point-in-the-build-life-cycle/2691/4
 # • https://gist.github.com/naesheim/18d0c0a58ee61f4674353a2f4cf71475
+# • http://www.zephyrizing.net/presentations/reimplementing-gitignore-in-15-lines-of-bash/
 
 set -e
 
-git diff "$GIT_BASE_REF" "$GIT_REF" code 2>&1
+non_ignored_paths=$({
+    find . -type f -o -type d -name .git -prune
+
+    find . -type f -name .ciignore
+    {
+	find -X . -type f -name .ciignore | xargs -n1 dirname |
+	while read dir
+	do
+	    sed 's|^|'"$dir/"'|' "$dir"/.ciignore
+	done
+    } | xargs -n1 find . -type d -name .git -prune -o -type f -path
+} | sort | uniq -u | cut -c3-)
+result="$(git diff "$GIT_BASE_REF" "$GIT_REF" $non_ignored_paths 2>&1)"
+
+if [ -z "$result" ]; then
+  echo "--> Skipping build"
+  if command -v circleci; then
+    circleci step halt
+  else
+    echo "--> Failed to find the 'circleci' bin to halt the build, bailing…"
+    exit 1
+  fi
+else
+  echo "--> Continuing with build"
+fi

@@ -10,5 +10,6 @@ jobs:
 
     steps:
       - run: script/skip_build_if_ignored_paths
+      - run: echo "Imagine I am running a build now!"
 
 

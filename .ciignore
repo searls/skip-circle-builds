@@ -1,0 +1,2 @@
+# Will ignore relative globs passed to find
+content/*
