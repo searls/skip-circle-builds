@@ -22,7 +22,7 @@ if [ -z "$GIT_REF" ]; then
 fi
 
 non_ignored_paths=$({
-    find . -type f -o -type d -name .git -prune
+    git ls-files | awk '{print "./" $0}'
 
     find . -type f -name .ciignore
     {
