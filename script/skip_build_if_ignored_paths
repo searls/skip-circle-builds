@@ -28,7 +28,7 @@ non_ignored_paths=$({
 
     find . -type f -name .ciignore
     {
-	find -X . -type f -name .ciignore | xargs -n1 dirname |
+	find . -type f -name .ciignore | xargs -n1 dirname |
 	while read dir
 	do
 	    sed 's|^|'"$dir/"'|' "$dir"/.ciignore
